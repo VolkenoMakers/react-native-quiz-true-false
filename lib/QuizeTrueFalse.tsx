@@ -70,7 +70,7 @@ const QuizTrueFalse = ({
       newQuestions[currentIndex] = activeQuestion;
       setQuestions(newQuestions);
     },
-    [questions]
+    [questions, currentIndex]
   );
   const onNext = React.useCallback(() => {
     if (currentIndex === questions.length - 1) {
