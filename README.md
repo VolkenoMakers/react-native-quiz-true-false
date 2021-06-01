@@ -1,21 +1,21 @@
-# react-native-quiz-true-false
+# volkeno-react-native-quiz-true-false
 
 ![Single select](https://raw.githubusercontent.com/VolkenoMakers/react-native-quiz-true-false/main/demo.gif)
 
 ## Add it to your project
 
 - Using NPM
-  `npm install react-native-quiz-true-false`
+  `npm install volkeno-react-native-quiz-true-false`
 - or:
 - Using Yarn
-  `yarn add react-native-quiz-true-false`
+  `yarn add volkeno-react-native-quiz-true-false`
 
 ## Usage
 
 ```javascript
 import React from "react";
 
-import QuizeTrueFalse from "react-native-quiz-true-false";
+import QuizeTrueFalse from "volkeno-react-native-quiz-true-false";
 
 const QuizTrueFalseApp = () => {
   const data = [

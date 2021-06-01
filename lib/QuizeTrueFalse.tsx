@@ -1,9 +1,37 @@
 import React from "react";
+import { ViewStyle } from "react-native";
+import { TextStyle } from "react-native";
 import { View, Text, Dimensions, Animated } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { OppButton } from "./Buttons";
 const { width } = Dimensions.get("window");
 
+type ItemProps = {
+  question: string;
+  answer: boolean;
+};
+interface QuizTrueFalseProps {
+  containerStyle: ViewStyle;
+  questionTitleStyle: TextStyle;
+  trueText: string;
+  falseText: string;
+  checkedColor: string;
+  uncheckedColor: string;
+  textStyle: TextStyle;
+  nextButtonText: string;
+  nextButtonStyle: ViewStyle;
+  nextButtonTextStyle: TextStyle;
+  endButtonText: string;
+  endButtonStyle: ViewStyle;
+  endButtonTextStyle: TextStyle;
+  prevButtonText: string;
+  prevButtonStyle: ViewStyle;
+  prevButtonTextStyle: TextStyle;
+  buttonsContainerStyle: ViewStyle;
+  responseRequired: boolean;
+  onEnd: (results: Array<any>) => any;
+  data: Array<ItemProps>;
+}
 const QuizTrueFalse = ({
   containerStyle,
   questionTitleStyle,
@@ -25,7 +53,7 @@ const QuizTrueFalse = ({
   responseRequired,
   onEnd,
   data,
-}) => {
+}: QuizTrueFalseProps) => {
   const originalData = data;
   const [questions, setQuestions] = React.useState([
     ...originalData.sort((_) => Math.random() - 0.5),
@@ -34,13 +62,16 @@ const QuizTrueFalse = ({
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const animation = React.useRef(new Animated.Value(0)).current;
 
-  const onAnswer = React.useCallback((_, response) => {
-    const newQuestions = [...questions];
-    const activeQuestion = { ...newQuestions[currentIndex] };
-    activeQuestion.response = response;
-    newQuestions[currentIndex] = activeQuestion;
-    setQuestions(newQuestions);
-  });
+  const onAnswer = React.useCallback(
+    (_, response) => {
+      const newQuestions = [...questions];
+      const activeQuestion: any = { ...newQuestions[currentIndex] };
+      activeQuestion.response = response;
+      newQuestions[currentIndex] = activeQuestion;
+      setQuestions(newQuestions);
+    },
+    [questions]
+  );
   const onNext = React.useCallback(() => {
     if (currentIndex === questions.length - 1) {
       handleEnd(questions);
@@ -132,10 +163,11 @@ const QuizTrueFalse = ({
             onPrev();
           }}
           disabled={isFirst}
-          containerStyle={[
-            { width: "40%", backgroundColor: "#F00" },
-            prevButtonStyle,
-          ]}
+          containerStyle={{
+            width: "40%",
+            backgroundColor: "#F00",
+            ...prevButtonStyle,
+          }}
           title={prevButtonText}
           titleStyle={[{ color: "#FFF" }, prevButtonTextStyle]}
         />
@@ -144,10 +176,11 @@ const QuizTrueFalse = ({
             onNext();
           }}
           disabled={nextDisabled}
-          containerStyle={[
-            { width: "40%", backgroundColor: "#000" },
-            isLast ? endButtonStyle : nextButtonStyle,
-          ]}
+          containerStyle={{
+            width: "40%",
+            backgroundColor: "#000",
+            ...(isLast ? endButtonStyle : nextButtonStyle),
+          }}
           title={isLast ? endButtonText : nextButtonText}
           titleStyle={[
             { color: "#FFF" },
@@ -161,6 +194,16 @@ const QuizTrueFalse = ({
 
 export default QuizTrueFalse;
 
+type QuestionProps = {
+  item: any;
+  onAnswer: Function;
+  questionTitleStyle: TextStyle;
+  checkedColor: string;
+  uncheckedColor: string;
+  textStyle: TextStyle;
+  trueText: string;
+  falseText: string;
+};
 function Question({
   item,
   onAnswer,
@@ -170,7 +213,7 @@ function Question({
   textStyle,
   trueText,
   falseText,
-}) {
+}: QuestionProps) {
   return (
     <View style={{ marginTop: 30, width: width - 50, alignItems: "center" }}>
       <Text
@@ -217,6 +260,14 @@ function Question({
     </View>
   );
 }
+type CustomCheckboxProps = {
+  title: string;
+  value: boolean;
+  uncheckedColor: string;
+  checkedColor: string;
+  textStyle: TextStyle;
+  onChange: Function;
+};
 function CustomCheckbox({
   title,
   value,
@@ -224,7 +275,7 @@ function CustomCheckbox({
   checkedColor,
   textStyle,
   onChange,
-}) {
+}: CustomCheckboxProps) {
   return (
     <CheckBox
       center
